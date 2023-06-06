@@ -28,7 +28,7 @@ async function createIndex() {
     index: {
       displayName: "my-demo-index",
       indexUpdateMethod: "STREAM_UPDATE",
-      description: "My fist index",
+      description: "My frist index",
       metadataSchemaUri:
         "gs://google-cloud-aiplatform/schema/matchingengine/metadata/nearest_neighbor_search_1.0.0.yaml",
       metadata: {

@@ -29,8 +29,6 @@ async function createIndex() {
       displayName: "my-demo-index",
       indexUpdateMethod: "STREAM_UPDATE",
       description: "My frist index",
-      metadataSchemaUri:
-        "gs://google-cloud-aiplatform/schema/matchingengine/metadata/nearest_neighbor_search_1.0.0.yaml",
       metadata: {
         contentsDeltaUri: "gs://my-demo-embbeddings/",
         config: {
@@ -40,7 +38,7 @@ async function createIndex() {
       },
     },
   };
-  console.log("[createIndex] request", request);
+  console.log("[createIndex] request", JSON.stringify(request, null, 2));
   const [operation] = await indexClient.createIndex(request);
   const [response] = await operation.promise();
   console.log("[createIndex]", response);
@@ -61,7 +59,7 @@ async function listEndpoints() {
 }
 
 async function main() {
-  await createIndex();
+  // await createIndex(); // 動かない
   // listEndpoints();
 }
 

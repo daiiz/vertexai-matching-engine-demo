@@ -5,11 +5,11 @@
 require("dotenv").config();
 const { EndpointServiceClient } = require("@google-cloud/aiplatform");
 
-const { PROJECT_ID, LOCATION } = process.env;
+const { PROJECT_ID, LOCATION, SERVICE_ACCOUNT } = process.env;
 
 const clientOptions = {
   apiEndpoint: "us-central1-aiplatform.googleapis.com",
-  credentials: JSON.parse(process.env.SERVICE_ACCOUNT),
+  credentials: JSON.parse(SERVICE_ACCOUNT),
 };
 
 const client = new EndpointServiceClient(clientOptions);

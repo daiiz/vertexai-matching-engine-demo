@@ -1,0 +1,15 @@
+{
+  "contentsDeltaUri": "gs://my-demo-embbeddings/",
+  "config": {
+    "dimensions": 1536,
+    "approximateNeighborsCount": 150,
+    "distanceMeasureType": "DOT_PRODUCT_DISTANCE",
+    "algorithm_config": {
+      "treeAhConfig": {
+        "leafNodeEmbeddingCount": 500,
+        "leafNodesToSearchPercent": 7
+      }
+    },
+    "shardSize": "SHARD_SIZE_SMALL"
+  }
+}

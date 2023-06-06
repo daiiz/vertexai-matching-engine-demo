@@ -1,1 +1,8 @@
-{ "id": "dog", "embedding": [0.1, 0.2, 1] }
+{
+  "id": "いぬ",
+  "embedding": [0.1, 0.2, 1],
+  "restricts": [
+    { "namespace": "class", "allow": ["dog", "pet"] },
+    { "namespace": "category", "allow": ["canine"] }
+  ]
+}

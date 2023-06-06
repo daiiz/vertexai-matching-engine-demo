@@ -1,5 +1,5 @@
 {
-  "contentsDeltaUri": "gs://my-demo-embbeddings2/index_dir/",
+  "contentsDeltaUri": "gs://my-demo-embbeddings2/index_dir2/",
   "config": {
     "dimensions": 3,
     "approximateNeighborsCount": 150,

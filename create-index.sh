@@ -10,4 +10,3 @@ gcloud ai indexes create \
   --display-name="my-demo-index" \
   --project=$PROJECT \
   --region=us-central1
-

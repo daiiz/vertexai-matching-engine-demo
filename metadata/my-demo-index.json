@@ -1,7 +1,7 @@
 {
   "contentsDeltaUri": "gs://my-demo-embbeddings2/index_dir/",
   "config": {
-    "dimensions": 1536,
+    "dimensions": 3,
     "approximateNeighborsCount": 150,
     "distanceMeasureType": "DOT_PRODUCT_DISTANCE",
     "algorithm_config": {

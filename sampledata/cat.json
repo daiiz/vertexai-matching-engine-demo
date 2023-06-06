@@ -1,5 +1,5 @@
 {
-  "id": "ねこ",
+  "id": "Cat1",
   "embedding": [1, 0.2, 0.1],
   "restricts": [
     { "namespace": "class", "allow": ["cat", "pet"] },

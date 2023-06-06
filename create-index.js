@@ -3,6 +3,7 @@
  * https://www.npmjs.com/package/@google-cloud/aiplatform
  */
 require("dotenv").config();
+const fs = require("fs");
 const {
   EndpointServiceClient,
   IndexServiceClient,
@@ -22,20 +23,14 @@ const indexClient = new IndexServiceClient(clientOptions);
 
 // https://github.com/googleapis/google-cloud-node/blob/main/packages/google-cloud-aiplatform/samples/generated/v1/index_service.create_index.js
 // https://cloud.google.com/vertex-ai/docs/reference/rest/v1/projects.locations.indexes#Index
-async function createIndex() {
+async function createIndex(metadata = {}) {
   const request = {
     parent,
     index: {
-      displayName: "my-demo-index",
+      displayName: "my-demo-nodejs-index",
       indexUpdateMethod: "STREAM_UPDATE",
-      description: "My frist index",
-      metadata: {
-        contentsDeltaUri: "gs://my-demo-embbeddings/",
-        config: {
-          dimensions: 1536,
-          shardSize: "SHARD_SIZE_SMALL",
-        },
-      },
+      description: "My frist index from Node.js",
+      metadata,
     },
   };
   console.log("[createIndex] request", JSON.stringify(request, null, 2));
@@ -59,7 +54,12 @@ async function listEndpoints() {
 }
 
 async function main() {
-  // await createIndex(); // 動かない
+  const metadata = JSON.parse(
+    await fs.promises.readFile("./metadata/my-demo-index.json", "utf8")
+  );
+  metadata.contentsDeltaUri = "gs://my-demo-embbeddings2/index_dir_nodejs/";
+  console.log("[main] metadata:", metadata);
+  // await createIndex(metadata); // 動かない
   // listEndpoints();
 }
 

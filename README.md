@@ -10,5 +10,5 @@ $ PROJECT=xxxxx sh create-index.sh
 
 ```sh
 $ cp sample.env .env
-$ node index.js
+$ node create-index.js
 ```

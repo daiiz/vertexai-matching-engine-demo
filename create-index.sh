@@ -7,6 +7,6 @@ gcloud ai indexes list \
 
 gcloud ai indexes create \
   --metadata-file="metadata/my-demo-index.json" \
-  --display-name="my-demo-index" \
+  --display-name="my-demo-index-2" \
   --project=$PROJECT \
   --region=us-central1

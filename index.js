@@ -28,8 +28,21 @@ async function createIndex() {
     index: {
       displayName: "my-demo-index",
       indexUpdateMethod: "STREAM_UPDATE",
+      description: "My fist index",
+      metadataSchemaUri:
+        "gs://google-cloud-aiplatform/schema/matchingengine/metadata/nearest_neighbor_search_1.0.0.yaml",
+      metadata: {
+        config: {
+          dimensions: 1536,
+          shardSize: "SHARD_SIZE_SMALL",
+        },
+      },
     },
   };
+  console.log("[createIndex] request", request);
+  const [operation] = await indexClient.createIndex(request);
+  const [response] = await operation.promise();
+  console.log("[createIndex]", response);
 }
 
 async function listEndpoints() {
@@ -46,4 +59,9 @@ async function listEndpoints() {
   }
 }
 
-// listEndpoints();
+async function main() {
+  await createIndex();
+  // listEndpoints();
+}
+
+main();

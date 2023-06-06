@@ -3,7 +3,10 @@
  * https://www.npmjs.com/package/@google-cloud/aiplatform
  */
 require("dotenv").config();
-const { EndpointServiceClient } = require("@google-cloud/aiplatform");
+const {
+  EndpointServiceClient,
+  IndexServiceClient,
+} = require("@google-cloud/aiplatform");
 
 const { PROJECT_ID, LOCATION, SERVICE_ACCOUNT } = process.env;
 
@@ -12,10 +15,24 @@ const clientOptions = {
   credentials: JSON.parse(SERVICE_ACCOUNT),
 };
 
+const parent = `projects/${PROJECT_ID}/locations/${LOCATION}`;
+
 const client = new EndpointServiceClient(clientOptions);
+const indexClient = new IndexServiceClient(clientOptions);
+
+// https://github.com/googleapis/google-cloud-node/blob/main/packages/google-cloud-aiplatform/samples/generated/v1/index_service.create_index.js
+// https://cloud.google.com/vertex-ai/docs/reference/rest/v1/projects.locations.indexes#Index
+async function createIndex() {
+  const request = {
+    parent,
+    index: {
+      displayName: "my-demo-index",
+      indexUpdateMethod: "STREAM_UPDATE",
+    },
+  };
+}
 
 async function listEndpoints() {
-  const parent = `projects/${PROJECT_ID}/locations/${LOCATION}`;
   const request = {
     parent,
   };
@@ -29,4 +46,4 @@ async function listEndpoints() {
   }
 }
 
-listEndpoints();
+// listEndpoints();

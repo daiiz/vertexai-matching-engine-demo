@@ -32,6 +32,7 @@ async function createIndex() {
       metadataSchemaUri:
         "gs://google-cloud-aiplatform/schema/matchingengine/metadata/nearest_neighbor_search_1.0.0.yaml",
       metadata: {
+        contentsDeltaUri: "gs://my-demo-embbeddings/",
         config: {
           dimensions: 1536,
           shardSize: "SHARD_SIZE_SMALL",

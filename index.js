@@ -12,4 +12,15 @@ const clientOptions = {
 };
 
 const client = new EndpointServiceClient(clientOptions);
-console.log("...", client);
+
+async function listEndpoints() {
+  const parent = `projects/${PROJECT_ID}/locations/${LOCATION}`;
+  const request = {
+    parent,
+  };
+  console.log("request: ", request);
+  const [result] = await client.listEndpoints(request);
+  console.log("result: ", result);
+}
+
+listEndpoints();

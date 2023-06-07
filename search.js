@@ -1,5 +1,5 @@
 require("dotenv").config();
-// まv1beta1にしか存在しない
+// まだv1beta1にしか存在しない
 const { MatchServiceClient } = require("@google-cloud/aiplatform").v1beta1;
 
 const { PROJECT_ID, LOCATION, SERVICE_ACCOUNT, INDEX_ENDPOINT } = process.env;

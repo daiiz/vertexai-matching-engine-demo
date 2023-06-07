@@ -1,12 +1,20 @@
 require("dotenv").config();
 const fetch = require("node-fetch");
 const { GoogleAuth } = require("google-auth-library");
+const { genEmbedding } = require("./tools/gen-embedding");
 const {
   SERVICE_ACCOUNT,
   INDEX_ENDPOINT_NAME,
   INDEX_ENDPOINT_PUBLIC_DOMAIN_NAME,
   INDEX_ID,
 } = process.env;
+
+const rawInputText = process.argv[2];
+
+// if (!rawInputText) {
+//   console.error("Usage: node search.js <query_text>");
+//   process.exit(1);
+// }
 
 const auth = new GoogleAuth({
   scopes: ["https://www.googleapis.com/auth/cloud-platform"],
@@ -18,7 +26,7 @@ const auth = new GoogleAuth({
  * https://cloud.google.com/vertex-ai/docs/matching-engine/query-index-public-endpoint
  * いまはこれを生で叩くしかないのでは？
  */
-async function findNeighbors() {
+async function findNeighbors(queryText) {
   const token = await auth.getAccessToken();
   let apiUri = `https://${INDEX_ENDPOINT_PUBLIC_DOMAIN_NAME}/v1`;
   apiUri += `/${INDEX_ENDPOINT_NAME}:findNeighbors`;
@@ -38,7 +46,9 @@ async function findNeighbors() {
           // IndexDatapoint
           datapoint: {
             datapoint_id: "query",
-            feature_vector: [0.5, 0.3, 0.2],
+            feature_vector: queryText
+              ? (await genEmbedding(queryText, true)).slice(0, 3) // いまだけ
+              : [0.2, 0.3, 0.5],
             // Restriction[]
             restricts: [
               { namespace: "class", allow_list: ["cat", "dog"] },
@@ -60,7 +70,8 @@ async function findNeighbors() {
 }
 
 async function main() {
-  await findNeighbors();
+  console.log("queryText:", rawInputText);
+  await findNeighbors(rawInputText);
 }
 
 main();

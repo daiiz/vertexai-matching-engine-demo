@@ -1,0 +1,15 @@
+{
+  "display_name": "Search index for my text embeddings",
+  "metadata": {
+    "contentsDeltaUri": "gs://my-demo-embbeddings2/index_dir3/",
+    "config": {
+      "dimensions": 1536,
+      "approximateNeighborsCount": 100,
+      "shardSize": "SHARD_SIZE_SMALL",
+      "algorithm_config": {
+        "treeAhConfig": {}
+      }
+    }
+  },
+  "indexUpdateMethod": "STREAM_UPDATE"
+}

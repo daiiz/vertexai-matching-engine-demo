@@ -9,6 +9,8 @@ const {
   INDEX_ID,
 } = process.env;
 
+const SUMMARY_MODE = true;
+
 const rawInputText = process.argv[2];
 
 if (!rawInputText) {
@@ -65,7 +67,16 @@ async function findNeighbors(queryText) {
 
   if (res.ok) {
     const data = await res.json();
-    console.log(JSON.stringify(data, null, 2));
+    console.log("result:");
+    if (SUMMARY_MODE) {
+      const nearestNeighbors = data.nearestNeighbors[0].neighbors || [];
+      for (const neighbor of nearestNeighbors) {
+        const { datapoint, distance } = neighbor;
+        console.log("\t", datapoint.datapointId, "\t", distance);
+      }
+    } else {
+      console.log(JSON.stringify(data, null, 2));
+    }
   } else {
     console.error("error", res.status, await res.text());
   }

@@ -5,6 +5,7 @@ const { genEmbedding } = require("../tools/gen-embedding");
 const { SERVICE_ACCOUNT, INDEX_NAME } = process.env;
 
 const rawInputText = process.argv[2];
+const willRemove = process.argv[3] === "remove";
 
 if (!rawInputText) {
   console.error("Usage: node upsert.js <text>");
@@ -61,8 +62,11 @@ async function upsertDatapoints(texts = []) {
 }
 
 async function main() {
-  console.log("newText:", rawInputText);
-  await upsertDatapoints([rawInputText]);
+  if (willRemove) {
+  } else {
+    console.log("upsertDatapoint:", rawInputText);
+    await upsertDatapoints([rawInputText]);
+  }
 }
 
 main();

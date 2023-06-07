@@ -8,7 +8,7 @@ $ PROJECT=xxxxx sh create-index.sh
 
 ## Create a new IndexEndpoint
 
-Public endpoint
+[Public endpoint](https://cloud.google.com/vertex-ai/docs/matching-engine/deploy-index-public#deploy_index_default-drest)
 
 ```sh
 $ sh create-index-endpoint.sh

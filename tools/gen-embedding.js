@@ -3,14 +3,14 @@
 const fetch = require("node-fetch");
 require("dotenv").config();
 
-const inputText = process.argv[2];
+const rawInputText = process.argv[2];
 
-if (!inputText) {
+if (!rawInputText) {
   console.error("Usage: node tools/gen-embedding.js <input_text>");
   process.exit(1);
 }
 
-async function main() {
+async function genEmbedding(inputText) {
   // OpenAI
   const res = await fetch("https://api.openai.com/v1/embeddings", {
     method: "POST",
@@ -56,4 +56,12 @@ async function main() {
   }
 }
 
+async function main() {
+  await genEmbedding(rawInputText);
+}
+
 main();
+
+module.exports = {
+  genEmbedding,
+};

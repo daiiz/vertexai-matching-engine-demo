@@ -2,8 +2,6 @@ require("dotenv").config();
 const fetch = require("node-fetch");
 const { GoogleAuth } = require("google-auth-library");
 const {
-  PROJECT_ID,
-  LOCATION,
   SERVICE_ACCOUNT,
   INDEX_ENDPOINT_NAME,
   INDEX_ENDPOINT_PUBLIC_DOMAIN_NAME,

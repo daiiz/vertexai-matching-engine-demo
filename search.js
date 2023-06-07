@@ -11,10 +11,10 @@ const {
 
 const rawInputText = process.argv[2];
 
-// if (!rawInputText) {
-//   console.error("Usage: node search.js <query_text>");
-//   process.exit(1);
-// }
+if (!rawInputText) {
+  console.error("Usage: node search.js <query_text>");
+  process.exit(1);
+}
 
 const auth = new GoogleAuth({
   scopes: ["https://www.googleapis.com/auth/cloud-platform"],
@@ -46,13 +46,15 @@ async function findNeighbors(queryText) {
           // IndexDatapoint
           datapoint: {
             datapoint_id: "query",
-            feature_vector: queryText
-              ? (await genEmbedding(queryText, true)).slice(0, 3) // いまだけ
-              : [0.2, 0.3, 0.5],
+            feature_vector: await genEmbedding(queryText, true),
             // Restriction[]
             restricts: [
-              { namespace: "class", allow_list: ["cat", "dog"] },
-              // { namespace: "category", allow_list: ["feline"] },
+              { namespace: "appname", allow_list: ["demo"] },
+              { namespace: "username", allow_list: ["daiiz"] },
+              {
+                namespace: "visible",
+                allow: ["public"],
+              },
             ],
           },
           neighbor_count: 30,

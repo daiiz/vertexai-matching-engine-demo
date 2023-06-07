@@ -1,7 +1,7 @@
 require("dotenv").config();
 const fetch = require("node-fetch");
 const { GoogleAuth } = require("google-auth-library");
-const { genEmbedding } = require("./tools/gen-embedding");
+const { genEmbedding } = require("../tools/gen-embedding");
 const {
   SERVICE_ACCOUNT,
   INDEX_ENDPOINT_NAME,

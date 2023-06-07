@@ -20,7 +20,7 @@ const auth = new GoogleAuth({
  */
 async function findNeighbors() {
   const token = await auth.getAccessToken();
-  let apiUri = `https://${INDEX_ENDPOINT_PUBLIC_DOMAIN_NAME}/v1beta1`;
+  let apiUri = `https://${INDEX_ENDPOINT_PUBLIC_DOMAIN_NAME}/v1`;
   apiUri += `/${INDEX_ENDPOINT_NAME}:findNeighbors`;
 
   const res = await fetch(apiUri, {

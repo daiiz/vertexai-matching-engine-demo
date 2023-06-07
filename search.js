@@ -53,11 +53,11 @@ async function findNeighbors(queryText) {
               { namespace: "username", allow_list: ["daiiz"] },
               {
                 namespace: "visible",
-                allow: ["public"],
+                allow_list: ["public", "private"],
               },
             ],
           },
-          neighbor_count: 5,
+          neighbor_count: 3,
         },
       ],
     }),

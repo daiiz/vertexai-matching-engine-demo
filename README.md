@@ -6,6 +6,14 @@
 $ PROJECT=xxxxx sh create-index.sh
 ```
 
+## Create a new IndexEndpoint
+
+Public endpoint
+
+```sh
+$ sh create-index-endpoint.sh
+```
+
 ## Experiments
 
 ```sh

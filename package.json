@@ -11,6 +11,8 @@
   "dependencies": {
     "@google-cloud/aiplatform": "^2.14.0",
     "dotenv": "^16.1.4",
-    "google-gax": "^3.6.0"
+    "google-auth-library": "^8.8.0",
+    "google-gax": "^3.6.0",
+    "googleapis": "^118.0.0"
   }
 }

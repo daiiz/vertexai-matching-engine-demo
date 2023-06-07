@@ -1,7 +1,7 @@
 require("dotenv").config();
 const fetch = require("node-fetch");
 const { GoogleAuth } = require("google-auth-library");
-const { genEmbedding } = require("./tools/gen-embedding");
+const { genEmbedding } = require("../tools/gen-embedding");
 const {
   SERVICE_ACCOUNT,
   INDEX_ENDPOINT_NAME,
@@ -9,12 +9,14 @@ const {
   INDEX_ID,
 } = process.env;
 
+const SUMMARY_MODE = true;
+
 const rawInputText = process.argv[2];
 
-// if (!rawInputText) {
-//   console.error("Usage: node search.js <query_text>");
-//   process.exit(1);
-// }
+if (!rawInputText) {
+  console.error("Usage: node search.js <query_text>");
+  process.exit(1);
+}
 
 const auth = new GoogleAuth({
   scopes: ["https://www.googleapis.com/auth/cloud-platform"],
@@ -46,16 +48,18 @@ async function findNeighbors(queryText) {
           // IndexDatapoint
           datapoint: {
             datapoint_id: "query",
-            feature_vector: queryText
-              ? (await genEmbedding(queryText, true)).slice(0, 3) // いまだけ
-              : [0.2, 0.3, 0.5],
+            feature_vector: await genEmbedding(queryText, true),
             // Restriction[]
             restricts: [
-              { namespace: "class", allow_list: ["cat", "dog"] },
-              // { namespace: "category", allow_list: ["feline"] },
+              { namespace: "appname", allow_list: ["demo"] },
+              { namespace: "username", allow_list: ["daiiz"] },
+              {
+                namespace: "visible",
+                allow_list: ["public", "private"],
+              },
             ],
           },
-          neighbor_count: 30,
+          neighbor_count: 3,
         },
       ],
     }),
@@ -63,7 +67,16 @@ async function findNeighbors(queryText) {
 
   if (res.ok) {
     const data = await res.json();
-    console.log(JSON.stringify(data, null, 2));
+    console.log("result:");
+    if (SUMMARY_MODE) {
+      const nearestNeighbors = data.nearestNeighbors[0].neighbors || [];
+      for (const neighbor of nearestNeighbors) {
+        const { datapoint, distance } = neighbor;
+        console.log("\t", datapoint.datapointId, "\t", distance);
+      }
+    } else {
+      console.log(JSON.stringify(data, null, 2));
+    }
   } else {
     console.error("error", res.status, await res.text());
   }

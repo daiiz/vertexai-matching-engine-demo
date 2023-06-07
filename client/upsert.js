@@ -61,8 +61,34 @@ async function upsertDatapoints(texts = []) {
   }
 }
 
+/**
+ * Remove Data points
+ * https://cloud.google.com/vertex-ai/docs/matching-engine/update-rebuild-index#remove_datapoints
+ */
+async function removeDatapoints(texts = []) {
+  const token = await auth.getAccessToken();
+  const apiUri = `https://us-central1-aiplatform.googleapis.com/v1/${INDEX_NAME}:removeDatapoints`;
+
+  const res = await fetch(apiUri, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({ datapoint_ids: [...texts] }),
+  });
+
+  if (res.ok) {
+    console.log("OK!", await res.json());
+  } else {
+    console.error(res.status, await res.text());
+  }
+}
+
 async function main() {
   if (willRemove) {
+    console.log("removeDatapoint:", rawInputText);
+    await removeDatapoints([rawInputText]);
   } else {
     console.log("upsertDatapoint:", rawInputText);
     await upsertDatapoints([rawInputText]);

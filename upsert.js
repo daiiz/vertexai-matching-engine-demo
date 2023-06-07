@@ -21,6 +21,13 @@ const auth = new GoogleAuth({
   credentials: JSON.parse(SERVICE_ACCOUNT || "{}"),
 });
 
+/**
+ * Upsert Data points
+ * Upsert with restricts
+ * https://cloud.google.com/vertex-ai/docs/matching-engine/update-rebuild-index#upsert_with_restricts
+ */
+async function upsertDatapoint(text) {}
+
 async function main() {
   console.log("newText:", rawInputText);
   // await findNeighbors(rawInputText);

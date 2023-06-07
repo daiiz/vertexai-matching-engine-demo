@@ -1,3 +1,5 @@
 node_modules/*
+gomi/*
+pre.sh
 
 .env

@@ -14,6 +14,12 @@ $ PROJECT=xxxxx sh create-index.sh
 $ sh create-index-endpoint.sh
 ```
 
+## Deploy Index
+
+```sh
+$ sh deploy-index.sh
+```
+
 ## Experiments
 
 ```sh

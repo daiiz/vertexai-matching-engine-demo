@@ -5,12 +5,10 @@ require("dotenv").config();
 
 const rawInputText = process.argv[2];
 
-if (!rawInputText) {
-  console.error("Usage: node tools/gen-embedding.js <input_text>");
-  process.exit(1);
-}
-
-async function genEmbedding(inputText) {
+async function genEmbedding(inputText, omitOutput = false) {
+  if (!inputText) {
+    throw new Error("inputText is required");
+  }
   // OpenAI
   const res = await fetch("https://api.openai.com/v1/embeddings", {
     method: "POST",
@@ -43,24 +41,37 @@ async function genEmbedding(inputText) {
       },
     ];
 
-    console.log(
-      JSON.stringify({
-        id: inputText,
-        embedding,
-        restricts,
-      })
-    );
+    if (!omitOutput) {
+      console.log(
+        JSON.stringify({
+          id: inputText,
+          embedding,
+          restricts,
+        })
+      );
+    }
+
     // 出力完了
+    return embedding;
   } else {
     console.error("error", res.status, await res.text());
   }
+
+  return [];
 }
 
 async function main() {
   await genEmbedding(rawInputText);
 }
 
-main();
+if (require.main === module) {
+  if (!rawInputText) {
+    console.error("Usage: node tools/gen-embedding.js <input_text>");
+    process.exit(1);
+  }
+
+  main();
+}
 
 module.exports = {
   genEmbedding,

@@ -57,7 +57,7 @@ async function findNeighbors(queryText) {
               },
             ],
           },
-          neighbor_count: 30,
+          neighbor_count: 5,
         },
       ],
     }),

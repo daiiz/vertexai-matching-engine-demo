@@ -5,6 +5,7 @@ const { genEmbedding } = require("../tools/gen-embedding");
 const { SERVICE_ACCOUNT, INDEX_NAME } = process.env;
 
 const rawInputText = process.argv[2];
+const willRemove = process.argv[3] === "remove";
 
 if (!rawInputText) {
   console.error("Usage: node upsert.js <text>");
@@ -60,9 +61,38 @@ async function upsertDatapoints(texts = []) {
   }
 }
 
+/**
+ * Remove Data points
+ * https://cloud.google.com/vertex-ai/docs/matching-engine/update-rebuild-index#remove_datapoints
+ */
+async function removeDatapoints(texts = []) {
+  const token = await auth.getAccessToken();
+  const apiUri = `https://us-central1-aiplatform.googleapis.com/v1/${INDEX_NAME}:removeDatapoints`;
+
+  const res = await fetch(apiUri, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({ datapoint_ids: [...texts] }),
+  });
+
+  if (res.ok) {
+    console.log("OK!", await res.json());
+  } else {
+    console.error(res.status, await res.text());
+  }
+}
+
 async function main() {
-  console.log("newText:", rawInputText);
-  await upsertDatapoints([rawInputText]);
+  if (willRemove) {
+    console.log("removeDatapoint:", rawInputText);
+    await removeDatapoints([rawInputText]);
+  } else {
+    console.log("upsertDatapoint:", rawInputText);
+    await upsertDatapoints([rawInputText]);
+  }
 }
 
 main();

@@ -9,7 +9,7 @@ const {
   INDEX_ID,
 } = process.env;
 
-const SUMMARY_MODE = true;
+const SUMMARY_MODE = false;
 
 const rawInputText = process.argv[2];
 
@@ -59,7 +59,7 @@ async function findNeighbors(queryText) {
               },
             ],
           },
-          neighbor_count: 3,
+          neighbor_count: 10,
         },
       ],
     }),

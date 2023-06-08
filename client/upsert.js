@@ -1,8 +1,7 @@
 require("dotenv").config();
-const fs = require("fs");
 const fetch = require("node-fetch");
 const { GoogleAuth } = require("google-auth-library");
-const { calcHash } = require("./utils");
+const { saveStreamingData } = require("./utils");
 const { genEmbedding } = require("../tools/gen-embedding-palm");
 const { SERVICE_ACCOUNT, INDEX_NAME } = process.env;
 
@@ -48,24 +47,7 @@ async function upsertDatapoints(texts = []) {
     });
 
     // 永続化: ファイルに書き出しておく
-    // 初期データとして食わせられる形式で保存しておく
-    // "allow_list"ではなくて"allow"であることに注意
-    const filePath = `${streamingOutDir}/${calcHash(text)}.json`;
-    await fs.promises.writeFile(
-      filePath,
-      JSON.stringify({
-        id: text,
-        embedding,
-        restricts: restricts.map(({ namespace, allow_list }) => ({
-          namespace,
-          allow: allow_list,
-        })),
-      }),
-      {
-        encoding: "utf8",
-      }
-    );
-    console.log(">", filePath);
+    await saveStreamingData(text, embedding, restricts, streamingOutDir);
   }
 
   // Upsert to existing index

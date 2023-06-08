@@ -69,7 +69,7 @@ async function genEmbedding(inputText, omitOutput = false) {
     //   }
 
     // 出力完了
-    // return embedding;
+    return embedding;
   } else {
     console.error("error", res.status, await res.text());
   }

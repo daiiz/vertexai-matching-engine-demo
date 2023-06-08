@@ -9,7 +9,7 @@ const {
   INDEX_ID,
 } = process.env;
 
-const SUMMARY_MODE = false;
+const SUMMARY_MODE = true;
 
 const rawInputText = process.argv[2];
 

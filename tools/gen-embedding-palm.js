@@ -3,7 +3,7 @@
 require("dotenv").config();
 const fetch = require("node-fetch");
 const { GoogleAuth } = require("google-auth-library");
-const { SERVICE_ACCOUNT, PALM_EMBEDDING_ENDPOINT_NAME } = process.env;
+const { SERVICE_ACCOUNT, PROJECT_NUMBER } = process.env;
 
 const rawInputText = process.argv[2];
 
@@ -17,8 +17,11 @@ async function genEmbedding(inputText, omitOutput = false) {
     throw new Error("inputText is required");
   }
 
+  const model = "textembedding-gecko";
+  const endpointName = `projects/${PROJECT_NUMBER}/locations/us-central1/publishers/google/models/${model}`;
+  const apiUri = `https://us-central1-aiplatform.googleapis.com/v1/${endpointName}:predict`;
+
   const token = await auth.getAccessToken();
-  let apiUri = `https://us-central1-aiplatform.googleapis.com/v1/${PALM_EMBEDDING_ENDPOINT_NAME}:predict`;
 
   // PaLM API
   const res = await fetch(apiUri, {

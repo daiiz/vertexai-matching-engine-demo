@@ -5,3 +5,6 @@ pre.sh
 .env
 deploy_index.json
 note*.txt
+
+sampledata/**/streaming/*
+!sampledata/**/streaming/.gitkeep

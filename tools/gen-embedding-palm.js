@@ -1,4 +1,4 @@
-// node tools/gen-embedding-palm.js こんにちは > "./sampledata/text/$(uuidgen).json"
+// node tools/gen-embedding-palm.js こんにちは > "./sampledata/text768/$(uuidgen).json"
 
 require("dotenv").config();
 const fetch = require("node-fetch");
@@ -41,32 +41,31 @@ async function genEmbedding(inputText, omitOutput = false) {
     // 今回は1件のみ
     const { embeddings } = predictions[0];
     const embedding = embeddings.values;
-    console.log(embedding.length);
 
-    //   // Vertex AI
-    //   const restricts = [
-    //     { namespace: "appname", allow: ["demo"] },
-    //     { namespace: "username", allow: ["daiiz"] },
-    //     {
-    //       namespace: "visible",
-    //       allow: [
-    //         // 驚いているものはプライベート
-    //         inputText.endsWith("!") || inputText.endsWith("！")
-    //           ? "private"
-    //           : "public",
-    //       ],
-    //     },
-    //   ];
+    // Vertex AI
+    const restricts = [
+      { namespace: "appname", allow: ["demo"] },
+      { namespace: "username", allow: ["daiiz"] },
+      {
+        namespace: "visible",
+        allow: [
+          // 驚いているものはプライベート
+          inputText.endsWith("!") || inputText.endsWith("！")
+            ? "private"
+            : "public",
+        ],
+      },
+    ];
 
-    //   if (!omitOutput) {
-    //     console.log(
-    //       JSON.stringify({
-    //         id: inputText,
-    //         embedding,
-    //         restricts,
-    //       })
-    //     );
-    //   }
+    if (!omitOutput) {
+      console.log(
+        JSON.stringify({
+          id: inputText,
+          embedding,
+          restricts,
+        })
+      );
+    }
 
     // 出力完了
     return embedding;

@@ -2,8 +2,10 @@
 
 ## Create a new Index
 
+Ref. #5
+
 ```sh
-$ PROJECT=xxxxx sh create-index.sh
+$ sh create-stream-index.sh
 ```
 
 ## Create a new IndexEndpoint

@@ -3,10 +3,10 @@ const fs = require("fs");
 const fetch = require("node-fetch");
 const { GoogleAuth } = require("google-auth-library");
 const { calcHash } = require("./utils");
-const { genEmbedding } = require("../tools/gen-embedding"); // !!!
+const { genEmbedding } = require("../tools/gen-embedding-palm");
 const { SERVICE_ACCOUNT, INDEX_NAME } = process.env;
 
-const streamingOutDir = "./sampledata/text768/streaming";
+const streamingOutDir = "./sampledata/text768/streaming"; // gen-embedding-palm
 const rawInputText = process.argv[2];
 const willRemove = process.argv[3] === "remove";
 

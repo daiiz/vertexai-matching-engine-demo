@@ -59,7 +59,7 @@ async function findNeighbors(queryText) {
               },
             ],
           },
-          neighbor_count: 10,
+          neighbor_count: 3,
         },
       ],
     }),

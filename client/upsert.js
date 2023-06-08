@@ -1,9 +1,12 @@
 require("dotenv").config();
+const fs = require("fs");
 const fetch = require("node-fetch");
 const { GoogleAuth } = require("google-auth-library");
-const { genEmbedding } = require("../tools/gen-embedding");
+const { calcHash } = require("./utils");
+const { genEmbedding } = require("../tools/gen-embedding"); // !!!
 const { SERVICE_ACCOUNT, INDEX_NAME } = process.env;
 
+const streamingOutDir = "./sampledata/text768/streaming";
 const rawInputText = process.argv[2];
 const willRemove = process.argv[3] === "remove";
 
@@ -23,28 +26,51 @@ const auth = new GoogleAuth({
  * https://cloud.google.com/vertex-ai/docs/matching-engine/update-rebuild-index#upsert_with_restricts
  */
 async function upsertDatapoints(texts = []) {
-  const token = await auth.getAccessToken();
-  const apiUri = `https://us-central1-aiplatform.googleapis.com/v1/${INDEX_NAME}:upsertDatapoints`;
-
   const datapoints = [];
   for (const text of texts) {
+    const embedding = await genEmbedding(text, true);
+    const restricts = [
+      { namespace: "appname", allow_list: ["demo"] },
+      { namespace: "username", allow_list: ["daiiz"] },
+      {
+        namespace: "visible",
+        allow_list: [
+          // 驚いているものはプライベート
+          text.endsWith("!") || text.endsWith("！") ? "private" : "public",
+        ],
+      },
+    ];
+
     datapoints.push({
       datapoint_id: text,
-      feature_vector: await genEmbedding(text, true),
-      restricts: [
-        { namespace: "appname", allow_list: ["demo"] },
-        { namespace: "username", allow_list: ["daiiz"] },
-        {
-          namespace: "visible",
-          allow_list: [
-            // 驚いているものはプライベート
-            text.endsWith("!") || text.endsWith("！") ? "private" : "public",
-          ],
-        },
-      ],
+      feature_vector: embedding,
+      restricts,
     });
+
+    // 永続化: ファイルに書き出しておく
+    // 初期データとして食わせられる形式で保存しておく
+    // "allow_list"ではなくて"allow"であることに注意
+    const filePath = `${streamingOutDir}/${calcHash(text)}.json`;
+    await fs.promises.writeFile(
+      filePath,
+      JSON.stringify({
+        id: text,
+        embedding,
+        restricts: restricts.map(({ namespace, allow_list }) => ({
+          namespace,
+          allow: allow_list,
+        })),
+      }),
+      {
+        encoding: "utf8",
+      }
+    );
+    console.log(">", filePath);
   }
 
+  // Upsert to existing index
+  const token = await auth.getAccessToken();
+  const apiUri = `https://us-central1-aiplatform.googleapis.com/v1/${INDEX_NAME}:upsertDatapoints`;
   const res = await fetch(apiUri, {
     method: "POST",
     headers: {

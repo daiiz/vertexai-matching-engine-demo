@@ -4,4 +4,4 @@ pre.sh
 
 .env
 deploy_index.json
-note.txt
+note*.txt

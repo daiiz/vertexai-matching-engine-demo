@@ -1,0 +1,15 @@
+{
+  "display_name": "my-index-gecko",
+  "metadata": {
+    "contentsDeltaUri": "gs://my-demo-embbeddings2/text768/",
+    "config": {
+      "dimensions": 768,
+      "approximateNeighborsCount": 100,
+      "shardSize": "SHARD_SIZE_SMALL",
+      "algorithm_config": {
+        "treeAhConfig": {}
+      }
+    }
+  },
+  "indexUpdateMethod": "STREAM_UPDATE"
+}

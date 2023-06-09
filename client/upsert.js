@@ -2,10 +2,11 @@ require("dotenv").config();
 const fetch = require("node-fetch");
 const { GoogleAuth } = require("google-auth-library");
 const { saveStreamingData } = require("./utils");
-const { genEmbedding } = require("../tools/gen-embedding-palm");
-const { SERVICE_ACCOUNT, INDEX_NAME } = process.env;
+const { genEmbedding } = require("../tools/gen-embedding");
+const { SERVICE_ACCOUNT, INDEX_NAME } = process.env; // INDEX_NAME
 
-const streamingOutDir = "./sampledata/text768/streaming"; // gen-embedding-palm
+const streamingOutDir = "./sampledata/text1536/streaming"; // gen-embedding
+// const streamingOutDir = "./sampledata/text768/streaming"; // gen-embedding-palm
 const rawInputText = process.argv[2];
 const willRemove = process.argv[3] === "remove";
 
@@ -53,19 +54,23 @@ async function upsertDatapoints(texts = []) {
   // Upsert to existing index
   const token = await auth.getAccessToken();
   const apiUri = `https://us-central1-aiplatform.googleapis.com/v1/${INDEX_NAME}:upsertDatapoints`;
-  const res = await fetch(apiUri, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-    body: JSON.stringify({ datapoints }),
-  });
+  try {
+    const res = await fetch(apiUri, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ datapoints }),
+    });
 
-  if (res.ok) {
-    console.log("OK!", await res.json());
-  } else {
-    console.error(res.status, await res.text());
+    if (res.ok) {
+      console.log("OK!", await res.json());
+    } else {
+      console.error(res.status, await res.text());
+    }
+  } catch (err) {
+    console.error(err);
   }
 }
 
